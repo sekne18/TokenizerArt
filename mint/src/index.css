@@ -1,0 +1,120 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #0d0d0d;
+  background-image: radial-gradient(circle, #1a1a1a, #000000);
+  color: #00ffe1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.app {
+  text-align: center;
+  max-width: 500px;
+  padding: 2rem;
+  border: 1px solid #00ffe1;
+  border-radius: 10px;
+  background: rgba(15, 12, 41, 0.8);
+  box-shadow: 0 0 15px #00ffe1;
+}
+
+h1 {
+  font-size: 1.8rem;
+  color: #ff00cc;
+  text-shadow: 0 0 10px #ff00cc;
+}
+
+input[type='file'] {
+  margin: 1rem 0;
+  padding: 0.5rem;
+  border: 2px solid #00ffe1;
+  background: transparent;
+  color: #00ffe1;
+  width: 100%;
+}
+
+button {
+  padding: 0.75rem 2rem;
+  background: #00ffe1;
+  color: #0d0d0d;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #ff00cc;
+  color: #ffffff;
+  box-shadow: 0 0 10px #ff00cc;
+}
+
+.status {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  color: #00ffe1;
+}
+
+/* File Upload Styling */
+.upload-container {
+  margin: 1.5rem 0;
+}
+
+.file-input-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem;
+  border: 2px dashed #00ffe1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(0, 255, 225, 0.05);
+}
+
+.file-input-label:hover {
+  background: rgba(0, 255, 225, 0.1);
+  box-shadow: 0 0 10px #00ffe1;
+}
+
+.upload-icon {
+  font-size: 1.2rem;
+}
+
+.hidden-input {
+  display: none;
+}
+
+/* Text Input Styling */
+.input-container {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.neon-input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 0.75rem 0rem;
+  background: transparent;
+  border: 2px solid #00ffe1;
+  border-radius: 8px;
+  color: #00ffe1;
+  font-family: 'Courier New', Courier, monospace;
+  outline: none;
+}
+
+.neon-input:focus {
+  box-shadow: 0 0 10px #00ffe1;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 68%;
+  transform: translateY(-50%);
+  color: #ff00cc;
+}

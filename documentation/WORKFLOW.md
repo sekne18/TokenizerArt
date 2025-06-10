@@ -2,15 +2,14 @@
 
 1. Create an NFT Image
 - Design an image with "42" clearly visible
-- Upload to IPFS (web3.storage)
-- Get IPFS CID
 
 2. Set Up Development Environment
 ```
 npm install hardhat
 npm install @openzeppelin/contracts
+npm install dotenv
+npm install ethers
 npx hardhat init
-mkdir the-folder-structure
 ```
 
 3. Implement Smart Contract
