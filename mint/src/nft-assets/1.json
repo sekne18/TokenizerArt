@@ -1,6 +1,6 @@
 {
-    "name": "Chasing lion",
+    "name": "Chasing lion 42",
     "description": "Hungry lion chasing 42.",
-    "image": "",
+    "image": "ipfs://<image-CID>",
     "artist": "jsekne"
 }

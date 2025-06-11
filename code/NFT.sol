@@ -30,7 +30,7 @@ contract Lions42 is ERC721Enumerable, Ownable {
     string public baseExtension = ".json";
 
     constructor(address initialOwner) 
-        ERC721("Lions42", "LION")
+        ERC721("Chasing lion 42", "CL42")
         Ownable(initialOwner)
     {
     }

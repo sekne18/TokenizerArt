@@ -22,11 +22,16 @@ npx hardhat init
 
 5. Deploy contract:
 ```
-npx hardhat run deployment/deploy_script.js --network bsctestnet
+npx hardhat run deployment/deploy.ts --network bscTestnet
 ```
 
 6. Mint NFT:
-`npx hardhat run mint/mint_script.js --network bsctestnet`
+```
+cd /mint
+npm run dev
+open localhost:PORT in browser
+Upload image and mint
+```
 
 7. Vertify ownership:
-`await contract.ownerOf(1); // Returns owner address`
+`Enter NFT id to the input field and check for the ownership. The ID should be your wallet`
