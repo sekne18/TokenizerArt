@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 // import { Web3Provider } from '@ethersproject/providers';
-import { uploadToIPFS } from './ipfs';
-import { CONTRACT_ADDRESS, OWNER_ADDRESS } from './constants';
+import { uploadToWeb3 } from './ipfs';
+import { CONTRACT_ADDRESS } from './constants';
 import { Contract, ethers } from 'ethers';
 import Lions42 from '../../artifacts/code/NFT.sol/Lions42.json';
 
@@ -31,33 +31,30 @@ function App() {
       setMinting(true);
       setStatus('📤 Uploading to IPFS...');
 
-      const { metadataUrl, imageUrl } = await uploadToIPFS(file, artistLogin);
-
-      setStatus(`✅ Uploaded. Metadata URI: ${metadataUrl}`);
-      console.log('Image:', imageUrl);
-      console.log('Metadata:', metadataUrl);
-
-      setStatus('🚀 Sending mint transaction...');
-
       if (!window.ethereum) throw new Error('MetaMask not detected');
-
       const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
       const contract = new Contract(CONTRACT_ADDRESS, Lions42.abi, signer as any);
-      console.log('Contract instance:', contract);
-      // const price = parseEther('0.01'); // Update if your price differs
+      
+      // Get total supply (current number of minted tokens)
+      const totalSupply = await contract.totalSupply();
 
-      const tx = await contract.mint(OWNER_ADDRESS);
-      console.log('Transaction hash:', tx.hash);
+      // Next token ID will be totalSupply + 1
+      const nextTokenId = Number(totalSupply) + 1;
+      const { folderCid, metadataUrl, imageUrl } = await uploadToWeb3(file, nextTokenId, artistLogin);
+
+      setStatus(`✅ Uploaded. Metadata URI: ${metadataUrl}`);
+      setStatus('🚀 Sending mint transaction...');
+      const address = await signer.getAddress();
+      const tx = await contract.mint(address);
       const receipt = await tx.wait(1);
-      console.log('Transaction receipt:', receipt);
 
       if (receipt.status === 1) {
         setStatus('✅ Minted successfully!');
+        await contract.setBaseURL(`https://w3s.link/ipfs/${folderCid}/collection/`);
         await new Promise(resolve => setTimeout(resolve, 500));
       } else {
-        console.log(receipt);
         throw new Error('Transaction failed');
       }
     } catch (err: any) {
@@ -70,7 +67,14 @@ function App() {
         errorMessage = err.data.message;
       }
 
-      setStatus(`❌ Error: ${errorMessage.split(':')[1]}`);
+      let parsedMessage = errorMessage;
+
+      if (errorMessage.includes(':')) {
+        const parts = errorMessage.split(':');
+        parsedMessage = parts.slice(1).join(':').trim();
+      }
+
+      setStatus(`❌ Error: ${parsedMessage}`);
     } finally {
       setMinting(false);
     }

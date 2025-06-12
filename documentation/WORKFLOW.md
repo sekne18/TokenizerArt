@@ -16,16 +16,26 @@ npx hardhat init
 - Create code/nft.sol
 - Compile: `npx hardhat compile`
 
-4. Configure Deployment
+4. Flatten Smart Contract - **NOT NECESSARY IN HARDHAT**
+```
+npx hardhat flatten .\code\NFT.sol > flattened_nft.sol    
+```
+
+5. Configure Deployment
 - Set up `hardhat.config.ts` for BSC Testnet
 - Add netowrk configuration
 
-5. Deploy contract:
+6. Deploy contract:
 ```
 npx hardhat run deployment/deploy.ts --network bscTestnet
 ```
 
-6. Mint NFT:
+7. Verify contract
+```
+npx hardhat verify --network bscTestnet <CONTRACT_ADDRESS>  "<OWNER_ADDRESS>"
+```
+
+8. Mint NFT:
 ```
 cd /mint
 npm run dev
@@ -33,5 +43,5 @@ open localhost:PORT in browser
 Upload image and mint
 ```
 
-7. Vertify ownership:
+9. Vertify ownership:
 `Enter NFT id to the input field and check for the ownership. The ID should be your wallet`
