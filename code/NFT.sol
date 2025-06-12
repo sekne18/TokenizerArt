@@ -25,7 +25,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 contract Lions42 is ERC721Enumerable, Ownable {
      using Strings for uint256;
 
-    uint256 public constant MAX_TOKENS = 1;
+    uint256 public constant MAX_TOKENS = 10;
     string private baseURL = "";
     string public baseExtension = ".json";
 

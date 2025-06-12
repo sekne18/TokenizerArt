@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import './App.css';
-import { Web3Provider } from '@ethersproject/providers';
+// import { Web3Provider } from '@ethersproject/providers';
 import { uploadToIPFS } from './ipfs';
 import { CONTRACT_ADDRESS, OWNER_ADDRESS } from './constants';
-import { Contract } from 'ethers';
+import { Contract, ethers } from 'ethers';
 import Lions42 from '../../artifacts/code/NFT.sol/Lions42.json';
 
 function App() {
@@ -41,22 +41,23 @@ function App() {
 
       if (!window.ethereum) throw new Error('MetaMask not detected');
 
-      const provider = new Web3Provider(window.ethereum);
+      const provider = new ethers.BrowserProvider(window.ethereum);
       await provider.send('eth_requestAccounts', []);
-      const signer = provider.getSigner();
+      const signer = await provider.getSigner();
       const contract = new Contract(CONTRACT_ADDRESS, Lions42.abi, signer as any);
-
+      console.log('Contract instance:', contract);
       // const price = parseEther('0.01'); // Update if your price differs
 
       const tx = await contract.mint(OWNER_ADDRESS);
       console.log('Transaction hash:', tx.hash);
-      const receipt = await tx.wait();
-      console.log('Transaction confirmed in block:', receipt.blockNumber);
+      const receipt = await tx.wait(1);
+      console.log('Transaction receipt:', receipt);
 
       if (receipt.status === 1) {
         setStatus('✅ Minted successfully!');
         await new Promise(resolve => setTimeout(resolve, 500));
       } else {
+        console.log(receipt);
         throw new Error('Transaction failed');
       }
     } catch (err: any) {
@@ -87,7 +88,7 @@ function App() {
 
       if (!window.ethereum) throw new Error('MetaMask not detected');
 
-      const provider = new Web3Provider(window.ethereum);
+      const provider = new ethers.BrowserProvider(window.ethereum);
       const contract = new Contract(CONTRACT_ADDRESS, Lions42.abi, provider as any);
 
       // Convert tokenId to number or BigNumber depending on your contract

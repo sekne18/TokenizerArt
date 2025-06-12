@@ -10,6 +10,3 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
-
-// Run this to deploy:
-// npx hardhat run deployment/deploy.ts --network bscTestnet

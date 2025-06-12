@@ -11,8 +11,8 @@ export async function uploadToIPFS(file: File, artistLogin: string) {
   
     // Create metadata object
     const metadata = {
-      name: 'Lion 42',
-      description: `Lion chasing 42.`,
+      name: 'Chasing lion 42',
+      description: `Hungry lion chasing `,
       image: imageUrl,
       author: artistLogin
     };
