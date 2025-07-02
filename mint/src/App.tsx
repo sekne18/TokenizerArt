@@ -36,13 +36,17 @@ function App() {
       await provider.send('eth_requestAccounts', []);
       const signer = await provider.getSigner();
       const contract = new Contract(CONTRACT_ADDRESS, Lions42.abi, signer as any);
-      
+
       // Get total supply (current number of minted tokens)
       const totalSupply = await contract.totalSupply();
 
       // Next token ID will be totalSupply + 1
       const nextTokenId = Number(totalSupply) + 1;
-      const { folderCid, metadataUrl, imageUrl } = await uploadToWeb3(file, nextTokenId, artistLogin);
+      const { metadataUrl, imageUrl } = await uploadToWeb3(file, nextTokenId, artistLogin);
+
+      // Set base URI BEFORE minting
+      const setUriTx = await contract.setBaseURL(metadataUrl);
+      await setUriTx.wait(1); // Wait for confirmation
 
       setStatus(`✅ Uploaded. Metadata URI: ${metadataUrl}`);
       setStatus('🚀 Sending mint transaction...');
@@ -52,8 +56,6 @@ function App() {
 
       if (receipt.status === 1) {
         setStatus('✅ Minted successfully!');
-        await contract.setBaseURL(`https://w3s.link/ipfs/${folderCid}/collection/`);
-        await new Promise(resolve => setTimeout(resolve, 500));
       } else {
         throw new Error('Transaction failed');
       }

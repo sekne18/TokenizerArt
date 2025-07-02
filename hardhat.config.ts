@@ -5,13 +5,14 @@ import "@nomiclabs/hardhat-etherscan";
 
 dotenv.config();
 
-if (!process.env.PRIVATE_KEY) {
+if (!process.env.PRIVATE_KEY) { 
   throw new Error("Please set your PRIVATE_KEY in a .env file");
 }
 
 const config: HardhatUserConfig = {
   paths: {
     sources: "./code",  // Tells Hardhat where your contracts are ( default: "./contracts" )
+    tests: "./mint/test",  // Tells Hardhat where your tests are ( default: "./test" )
     artifacts: "./artifacts",
   },
   defaultNetwork: 'bscTestnet',

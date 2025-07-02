@@ -33,20 +33,20 @@ export async function uploadToWeb3(
   tokenId: number,
   artistLogin: string
 ): Promise<{
-  folderCid: string;
   metadataUrl: string;
   imageUrl: string;
 }> {
   const client = await getClient();
 
-  // Upload image file separately to get CID
+  // 1. Upload the image alone, get CID
   const imageCid = await client.uploadFile(file);
-  const imageUrl = `https://w3s.link/ipfs/${imageCid}`;
+  const imageUrl = `https://ipfs.io/ipfs/${imageCid}`;
 
+  // 2. Create metadata JSON referencing full image URL
   const metadata = {
     name: `Chasing Lion ${tokenId}`,
     description: `Chasing lion - minted by ${artistLogin}`,
-    image: imageUrl,
+    image: imageUrl,    // full URL here
     author: artistLogin,
   };
 
@@ -58,21 +58,11 @@ export async function uploadToWeb3(
     type: 'application/json',
   });
 
-  // Set webkitRelativePath to simulate folder
-  Object.defineProperty(file, 'webkitRelativePath', {
-    value: `collection/image-${tokenId}.png`,
-  });
-
-  Object.defineProperty(metadataFile, 'webkitRelativePath', {
-    value: `collection/${tokenId}.json`,
-  });
-
-  const folderCid = await client.uploadDirectory([file as File, metadataFile]);
-
-  const metadataUrl = `https://w3s.link/ipfs/${folderCid}/collection/${tokenId}.json`;
+  // 3. Upload metadata file alone, get CID
+  const metadataCid = await client.uploadFile(metadataFile);
+  const metadataUrl = `https://ipfs.io/ipfs/${metadataCid}`;
 
   return {
-    folderCid: folderCid.toString(),
     metadataUrl,
     imageUrl,
   };
