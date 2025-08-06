@@ -9,7 +9,6 @@ async function getClient(): Promise<Client> {
 
   const client = await create();
   const email = await import.meta.env.VITE_EMAIL;
-  console.log('Using email:', email);
   await client.login(email as any);
 
   console.log('Logged in with email:', email);
@@ -18,8 +17,6 @@ async function getClient(): Promise<Client> {
   if (!spaces || spaces.length === 0) {
     throw new Error('No spaces found for this account');
   }
-
-  console.log('Available spaces:', spaces.map(space => space.did()));
 
   const space = spaces[1];
   await client.setCurrentSpace(space.did());
@@ -59,8 +56,8 @@ export async function uploadToWeb3(
   });
 
   // 3. Upload metadata file alone, get CID
-  const metadataCid = await client.uploadFile(metadataFile);
-  const metadataUrl = `https://ipfs.io/ipfs/${metadataCid}`;
+  const metadataCid = await client.uploadDirectory([metadataFile]);//await client.uploadFile(metadataFile);
+  const metadataUrl = `https://ipfs.io/ipfs/${metadataCid}/`;
 
   return {
     metadataUrl,
