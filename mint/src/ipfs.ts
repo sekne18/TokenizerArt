@@ -1,5 +1,4 @@
 // ipfs.ts
-import type { FileLike } from '@web3-storage/w3up-client/types';
 import { create, Client } from '@web3-storage/w3up-client';
 
 let cachedClient: Client | null = null;
@@ -26,43 +25,39 @@ async function getClient(): Promise<Client> {
 }
 
 export async function uploadToWeb3(
-  file: FileLike,
+  imageFile: File,
   tokenId: number,
   artistLogin: string
 ): Promise<{
-  metadataUrl: string;
+  CID: string;
   imageUrl: string;
 }> {
   const client = await getClient();
 
-  // 1. Upload the image alone, get CID
-  const imageCid = await client.uploadFile(file);
-  const imageUrl = `https://ipfs.io/ipfs/${imageCid}`;
+  // Rename the image file to match the tokenId
+  const renamedImageFile = new File([await imageFile.arrayBuffer()], `${tokenId}.png`, {
+    type: imageFile.type || 'image/png',
+  });
 
-  // 2. Create metadata JSON referencing full image URL
+  // Create metadata JSON
   const metadata = {
     name: `Chasing Lion ${tokenId}`,
     description: `Chasing lion - minted by ${artistLogin}`,
-    image: imageUrl,    // full URL here
+    image: `${tokenId}.png`, // Reference to the image file
     author: artistLogin,
   };
 
-  const metadataBlob = new Blob([JSON.stringify(metadata)], {
-    type: 'application/json',
-  });
+  const metadataBlob = new Blob([JSON.stringify(metadata)], { type: 'application/json' });
+  const metadataFile = new File([metadataBlob], `${tokenId}.json`, { type: 'application/json' });
 
-  const metadataFile = new File([metadataBlob], `${tokenId}.json`, {
-    type: 'application/json',
-  });
+  // Upload both files together as a folder
+  const rootCid = await client.uploadDirectory([metadataFile, renamedImageFile]);
 
-  // 3. Upload metadata file alone, get CID
-  const metadataCid = await client.uploadDirectory([metadataFile]);//await client.uploadFile(metadataFile);
-  const metadataUrl = `https://ipfs.io/ipfs/${metadataCid}/`;
+  // Construct URLs
+  const CID = `https://ipfs.io/ipfs/${rootCid}/`;
+  const imageUrl = `https://ipfs.io/ipfs/${rootCid}/${tokenId}.png`;
 
-  return {
-    metadataUrl,
-    imageUrl,
-  };
+  return { CID, imageUrl };
 }
 
 

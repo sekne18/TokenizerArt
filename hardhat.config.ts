@@ -5,8 +5,8 @@ import "@nomiclabs/hardhat-etherscan";
 
 dotenv.config();
 
-if (!process.env.PRIVATE_KEY) { 
-  throw new Error("Please set your PRIVATE_KEY in a .env file");
+if (!process.env.ETHERSCAN_API_KEY || !process.env.WALLET_API_KEY || !process.env.INFURA_API_KEY) { 
+  throw new Error("Please set your environment variables in a .env file");
 }
 
 const config: HardhatUserConfig = {
@@ -15,17 +15,17 @@ const config: HardhatUserConfig = {
     tests: "./mint/test",  // Tells Hardhat where your tests are ( default: "./test" )
     artifacts: "./artifacts",
   },
-  defaultNetwork: 'bscTestnet',
+  defaultNetwork: 'sepolia',
   networks: {
-    bscTestnet: {
-      url: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-      chainId: 97,
-      accounts: [process.env.PRIVATE_KEY],
+    sepolia: {
+      url: 'https://sepolia.infura.io/v3/' + process.env.INFURA_API_KEY, 
+      chainId: 11155111,
+      accounts: [process.env.WALLET_API_KEY]
     },
   },
   etherscan: {
     apiKey: {
-      bscTestnet: process.env.BSCSCAN_API_KEY || (() => { throw new Error("Please set your BSCSCAN_API_KEY in a .env file"); })(),
+      sepolia: process.env.ETHERSCAN_API_KEY,
     },
   },
   solidity: '0.8.28',

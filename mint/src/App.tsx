@@ -14,6 +14,7 @@ function App() {
   const [tokenIdToCheck, setTokenIdToCheck] = useState('');
   const [nftOwner, setNftOwner] = useState('');
   const [isCheckingOwner, setIsCheckingOwner] = useState(false);
+  const [nftImageUrl, setNftImageUrl] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -42,13 +43,13 @@ function App() {
 
       // Next token ID will be totalSupply + 1
       const nextTokenId = Number(totalSupply) + 1;
-      const { metadataUrl, imageUrl } = await uploadToWeb3(file, nextTokenId, artistLogin);
+      const { CID, imageUrl } = await uploadToWeb3(file, nextTokenId, artistLogin);
 
       // Set base URI BEFORE minting
-      const setUriTx = await contract.setBaseURL(metadataUrl);
+      const setUriTx = await contract.setBaseURL(CID);
       await setUriTx.wait(1); // Wait for confirmation
 
-      setStatus(`✅ Uploaded. Metadata URI: ${metadataUrl}`);
+      setStatus(`✅ Uploaded. Metadata URI: ${CID}/${nextTokenId}.json`);
       setStatus('🚀 Sending mint transaction...');
       const address = await signer.getAddress();
       const tx = await contract.mint(address);
@@ -56,6 +57,7 @@ function App() {
 
       if (receipt.status === 1) {
         setStatus('✅ Minted successfully!');
+        setNftImageUrl(imageUrl);
       } else {
         throw new Error('Transaction failed');
       }
@@ -99,7 +101,11 @@ function App() {
 
       // Convert tokenId to number or BigNumber depending on your contract
       const owner = await contract.ownerOf(tokenIdToCheck);
+      let url = await contract.tokenURI(tokenIdToCheck);
+      const folderUrl = url.substring(0, url.lastIndexOf("/"));
+
       setNftOwner(owner);
+      setNftImageUrl(`${folderUrl}/${tokenIdToCheck}.png`); // Assuming image is stored with tokenId as filename
       setStatus(`✅ Owner of token ${tokenIdToCheck}: ${owner}`);
     } catch (err: any) {
       console.error('Error checking owner:', err);
@@ -191,6 +197,23 @@ function App() {
           </div>
         )}
       </div>
+
+      {/* Display NFT Image if available */}
+      {nftImageUrl && (
+        <div className="nft-image-box" style={{
+          marginTop: '1rem',
+          padding: '1rem',
+          border: '2px solid #0ff',
+          borderRadius: '8px',
+          textAlign: 'center'
+        }}>
+          <img
+            src={nftImageUrl}
+            alt={`NFT #${tokenIdToCheck}`}
+            style={{ maxWidth: '300px', maxHeight: '300px', objectFit: 'contain' }}
+          />
+        </div>
+      )}
 
       {/* Status Message */}
       <p className="status-message">{status}</p>
