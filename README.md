@@ -4,18 +4,18 @@ Welcome to the **Chasing Lion 42** project – an artistic representation of a l
 
 ## 📌 Project Overview
 
-This NFT was created to fulfill the mandatory requirements of the Web3 NFT development subject from 42. The image contains the number 42 and is hosted on IPFS. The token was minted using a BEP-721 compliant smart contract on the BNB Testnet.
+This NFT was created to fulfill the mandatory requirements of the Web3 NFT development subject from 42. The image contains the number 42 and is hosted on IPFS. The token was minted using a ERC721 compliant smart contract on the BNB Testnet.
 
 - **NFT Name:** Chasing Lion 42
 - **Artist:** jsekne
 - **Image:** Stored on IPFS
-- **Standard:** BEP-721
+- **Standard:** ERC721
 - **Network:** BNB Chain Testnet
 
 ## 🧠 Rationale Behind Choices
 
 ### 🔗 Blockchain
-BNB Chain was chosen due to its robust support for NFTs via the BEP-721 standard, fast transaction speeds, and cost-effectiveness.
+BNB Chain was chosen due to its robust support for NFTs via the ERC721 standard, fast transaction speeds, and cost-effectiveness.
 
 ### 🛠️ Tools Used
 - **Hardhat** for smart contract development and deployment.
@@ -28,7 +28,7 @@ The image creatively embeds the number **42** in a surreal digital artwork where
 
 ## 🚀 Features
 
-- BEP-721 compliant NFT
+- ERC721 compliant NFT
 - Fully on-chain metadata and ownership tracking
 - IPFS-hosted media
 - Owner verification via `ownerOf` function

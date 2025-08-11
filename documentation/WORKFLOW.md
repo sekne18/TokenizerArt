@@ -27,12 +27,12 @@ npx hardhat flatten .\code\NFT.sol > flattened_nft.sol
 
 6. Deploy contract:
 ```
-npx hardhat run deployment/deploy.ts --network bscTestnet
+npx hardhat run deployment/deploy.ts --network sepolia
 ```
 
 7. Verify contract
 ```
-npx hardhat verify --network bscTestnet <CONTRACT_ADDRESS>  "<OWNER_ADDRESS>"
+npx hardhat verify --network sepolia <CONTRACT_ADDRESS>  "<OWNER_ADDRESS>"
 ```
 
 8. Mint NFT:

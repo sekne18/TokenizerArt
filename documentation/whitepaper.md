@@ -9,12 +9,12 @@ This NFT captures the philosophical idea of a wild pursuit of knowledge, symboli
 BNB Chain was selected due to:
 - High transaction throughput
 - Low fees
-- BEP-721 support
+- ERC721 support
 - Active ecosystem and testnet support
 
 ## ⚙️ Technology Stack
 
-- Smart Contract: Solidity (BEP-721)
+- Smart Contract: Solidity (ERC721)
 - Development Environment: Hardhat
 - Image Hosting: IPFS
 - Wallet: MetaMask
@@ -22,7 +22,7 @@ BNB Chain was selected due to:
 
 ## 🧠 Features & Functionality
 
-- BEP-721 Smart Contract
+- ERC721 Smart Contract
 - Mintable NFT
 - On-chain metadata resolution
 - IPFS image handling
